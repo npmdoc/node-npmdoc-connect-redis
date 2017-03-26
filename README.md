@@ -3,7 +3,7 @@
 
 [![NPM](https://nodei.co/npm/connect-redis.png?downloads=true)](https://www.npmjs.com/package/connect-redis)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-connect-redis/build/screen-capture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-connect_redis_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-connect-redis/build..beta..travis-ci.org/apidoc.html)
+[![apidoc](https://npmdoc.github.io/node-npmdoc-connect-redis/build/screen-capture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-connect-redis_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-connect-redis/build..beta..travis-ci.org/apidoc.html)
 
 ![package-listing](https://npmdoc.github.io/node-npmdoc-connect-redis/build/screen-capture.npmPackageListing.svg)
 
