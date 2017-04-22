@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/visionmedia/connect-redis#readme"
-
-    >connect-redis (v3.2.0)</a>
+    <a href="https://github.com/visionmedia/connect-redis#readme">connect-redis (v3.2.0)</a>
 </h1>
 <h4>Redis session store for Connect</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.connect-redis">module connect-redis</a><ol>
 
@@ -88,7 +81,7 @@
     <li>description and source-code<pre class="apidocCodePre">connect-redis = function (session) {
 
 <span class="apidocCodeCommentSpan">  /**
-   * Express&#x27;s session Store.
+   * Express's session Store.
    */
 </span>
   var Store = session.Store;
@@ -102,7 +95,7 @@
 
   function RedisStore (options) {
     if (!(this instanceof RedisStore)) {
-      throw new TypeError(&#x27;Cannot call RedisStore constructor as a function&#x27;);
+      throw new TypeError('Cannot call RedisStore constructor as a function');
     }
 
     var self = this;
@@ -110,7 +103,7 @@
     options = options || {};
     Store.call(this, options);
     this.prefix = options.prefix == null
-      ? &#x27;sess:&#x27;
+      ? 'sess:'
       : options.prefix;
 
     delete options.prefix;
@@ -136,12 +129,12 @@
     if(options.logErrors){
       // if options.logErrors is function, allow it to override. else provide default logger. useful for large scale deployment
       // which may need to write to a distributed log
-      if(typeof options.logErrors != &#x27;function&#x27;){
+      if(typeof options.logErrors != 'function'){
         options.logErrors = function (err) {
-  			  console.error(&#x27;Warning: connect-redis reported a client error: &#x27; + err);
+  			  console.error('Warning: connect-redis reported a client error: ' + err);
   		  };
       }
-  		this.client.on(&#x27;error&#x27;, options.logErrors);
+  		this.client.on('error', options.logErrors);
   	}
 
     if (options.pass) {
@@ -157,24 +150,24 @@
 
     if (options.unref) this.client.unref();
 
-    if (&#x27;db&#x27; in options) {
-      if (typeof options.db !== &#x27;number&#x27;) {
-        console.error(&#x27;Warning: connect-redis expects a number for the &#x22;db&#x22; option&#x27;);
+    if ('db' in options) {
+      if (typeof options.db !== 'number') {
+        console.error('Warning: connect-redis expects a number for the "db" option');
       }
 
       self.client.select(options.db);
-      self.client.on(&#x27;connect&#x27;, function () {
+      self.client.on('connect', function () {
         self.client.select(options.db);
       });
     }
 
-    self.client.on(&#x27;error&#x27;, function (er) {
-      debug(&#x27;Redis returned err&#x27;, er);
-      self.emit(&#x27;disconnect&#x27;, er);
+    self.client.on('error', function (er) {
+      debug('Redis returned err', er);
+      self.emit('disconnect', er);
     });
 
-    self.client.on(&#x27;connect&#x27;, function () {
-      self.emit(&#x27;connect&#x27;);
+    self.client.on('connect', function () {
+      self.emit('connect');
     });
   }
 
@@ -196,7 +189,7 @@
     var store = this;
     var psid = store.prefix + sid;
     if (!fn) fn = noop;
-    debug(&#x27;GET &#x22;%s&#x22;&#x27;, sid);
+    debug('GET "%s"', sid);
 
     store.client.get(psid, function (er, data) {
       if (er) return fn(er);
@@ -204,7 +197,7 @@
 
       var result;
       data = data.toString();
-      debug(&#x27;GOT %s&#x27;, data);
+      debug('GOT %s', data);
 
       try {
         result = store.serializer.parse(data);
@@ -241,15 +234,15 @@
 
     if (!store.disableTTL) {
       var ttl = getTTL(store, sess);
-      args.push(&#x27;EX&#x27;, ttl);
-      debug(&#x27;SET &#x22;%s&#x22; %s ttl:%s&#x27;, sid, jsess, ttl);
+      args.push('EX', ttl);
+      debug('SET "%s" %s ttl:%s', sid, jsess, ttl);
     } else {
-      debug(&#x27;SET &#x22;%s&#x22; %s&#x27;, sid, jsess);
+      debug('SET "%s" %s', sid, jsess);
     }
 
     store.client.set(args, function (er) {
       if (er) return fn(er);
-      debug(&#x27;SET complete&#x27;);
+      debug('SET complete');
       fn.apply(null, arguments);
     });
   };
@@ -262,7 +255,7 @@
    */
 
   RedisStore.prototype.destroy = function (sid, fn) {
-    debug(&#x27;DEL &#x22;%s&#x22;&#x27;, sid);
+    debug('DEL "%s"', sid);
     if (Array.isArray(sid)) {
       var multi = this.client.multi();
       var prefix = this.prefix;
@@ -280,3 +273,4 @@
     ]
 </div>
 </div>
+</body></html>

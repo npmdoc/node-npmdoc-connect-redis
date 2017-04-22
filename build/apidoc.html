@@ -61,12 +61,216 @@
 
     <li class="apidocModuleLi"><a href="#apidoc.module.connect-redis">module connect-redis</a><ol>
 
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.connect-redis.connect-redis">
+            function <span class="apidocSignatureSpan"></span>connect-redis
+            <span class="apidocSignatureSpan">(session)</span>
+            </a>
+
+        </li>
+
     </ol></li>
 
 </ol></div>
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.connect-redis" id="apidoc.module.connect-redis">module connect-redis</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.connect-redis.connect-redis" id="apidoc.element.connect-redis.connect-redis">
+        function <span class="apidocSignatureSpan"></span>connect-redis
+        <span class="apidocSignatureSpan">(session)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">connect-redis = function (session) {
+
+<span class="apidocCodeCommentSpan">  /**
+   * Express&#x27;s session Store.
+   */
+</span>
+  var Store = session.Store;
+
+  /**
+   * Initialize RedisStore with the given `options`.
+   *
+   * @param {Object} options
+   * @api public
+   */
+
+  function RedisStore (options) {
+    if (!(this instanceof RedisStore)) {
+      throw new TypeError(&#x27;Cannot call RedisStore constructor as a function&#x27;);
+    }
+
+    var self = this;
+
+    options = options || {};
+    Store.call(this, options);
+    this.prefix = options.prefix == null
+      ? &#x27;sess:&#x27;
+      : options.prefix;
+
+    delete options.prefix;
+
+    this.serializer = options.serializer || JSON;
+
+    if (options.url) {
+      options.socket = options.url;
+    }
+
+    // convert to redis connect params
+    if (options.client) {
+      this.client = options.client;
+    }
+    else if (options.socket) {
+      this.client = redis.createClient(options.socket, options);
+    }
+    else {
+      this.client = redis.createClient(options);
+    }
+
+    // logErrors
+    if(options.logErrors){
+      // if options.logErrors is function, allow it to override. else provide default logger. useful for large scale deployment
+      // which may need to write to a distributed log
+      if(typeof options.logErrors != &#x27;function&#x27;){
+        options.logErrors = function (err) {
+  			  console.error(&#x27;Warning: connect-redis reported a client error: &#x27; + err);
+  		  };
+      }
+  		this.client.on(&#x27;error&#x27;, options.logErrors);
+  	}
+
+    if (options.pass) {
+      this.client.auth(options.pass, function (err) {
+        if (err) {
+          throw err;
+        }
+      });
+    }
+
+    this.ttl = options.ttl;
+    this.disableTTL = options.disableTTL;
+
+    if (options.unref) this.client.unref();
+
+    if (&#x27;db&#x27; in options) {
+      if (typeof options.db !== &#x27;number&#x27;) {
+        console.error(&#x27;Warning: connect-redis expects a number for the &#x22;db&#x22; option&#x27;);
+      }
+
+      self.client.select(options.db);
+      self.client.on(&#x27;connect&#x27;, function () {
+        self.client.select(options.db);
+      });
+    }
+
+    self.client.on(&#x27;error&#x27;, function (er) {
+      debug(&#x27;Redis returned err&#x27;, er);
+      self.emit(&#x27;disconnect&#x27;, er);
+    });
+
+    self.client.on(&#x27;connect&#x27;, function () {
+      self.emit(&#x27;connect&#x27;);
+    });
+  }
+
+  /**
+   * Inherit from `Store`.
+   */
+
+  util.inherits(RedisStore, Store);
+
+  /**
+   * Attempt to fetch session by the given `sid`.
+   *
+   * @param {String} sid
+   * @param {Function} fn
+   * @api public
+   */
+
+  RedisStore.prototype.get = function (sid, fn) {
+    var store = this;
+    var psid = store.prefix + sid;
+    if (!fn) fn = noop;
+    debug(&#x27;GET &#x22;%s&#x22;&#x27;, sid);
+
+    store.client.get(psid, function (er, data) {
+      if (er) return fn(er);
+      if (!data) return fn();
+
+      var result;
+      data = data.toString();
+      debug(&#x27;GOT %s&#x27;, data);
+
+      try {
+        result = store.serializer.parse(data);
+      }
+      catch (er) {
+        return fn(er);
+      }
+      return fn(null, result);
+    });
+  };
+
+  /**
+   * Commit the given `sess` object associated with the given `sid`.
+   *
+   * @param {String} sid
+   * @param {Session} sess
+   * @param {Function} fn
+   * @api public
+   */
+
+  RedisStore.prototype.set = function (sid, sess, fn) {
+    var store = this;
+    var args = [store.prefix + sid];
+    if (!fn) fn = noop;
+
+    try {
+      var jsess = store.serializer.stringify(sess);
+    }
+    catch (er) {
+      return fn(er);
+    }
+
+    args.push(jsess);
+
+    if (!store.disableTTL) {
+      var ttl = getTTL(store, sess);
+      args.push(&#x27;EX&#x27;, ttl);
+      debug(&#x27;SET &#x22;%s&#x22; %s ttl:%s&#x27;, sid, jsess, ttl);
+    } else {
+      debug(&#x27;SET &#x22;%s&#x22; %s&#x27;, sid, jsess);
+    }
+
+    store.client.set(args, function (er) {
+      if (er) return fn(er);
+      debug(&#x27;SET complete&#x27;);
+      fn.apply(null, arguments);
+    });
+  };
+
+  /**
+   * Destroy the session associated with the given `sid`.
+   *
+   * @param {String} sid
+   * @api public
+   */
+
+  RedisStore.prototype.destroy = function (sid, fn) {
+    debug(&#x27;DEL &#x22;%s&#x22;&#x27;, sid);
+    if (Array.isArray(sid)) {
+      var multi = this.client.multi();
+      var prefix = this.prefix;
+      sid.forEach(function (s) {
+        multi.del( ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 </div>
 
