@@ -1,9 +1,14 @@
-# api documentation for  [connect-redis (v3.2.0)](https://github.com/visionmedia/connect-redis#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-connect-redis.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-connect-redis) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-connect-redis.svg)](https://travis-ci.org/npmdoc/node-npmdoc-connect-redis)
+# npmdoc-connect-redis
+
+#### api documentation for  [connect-redis (v3.2.0)](https://github.com/visionmedia/connect-redis#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-connect-redis.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-connect-redis) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-connect-redis.svg)](https://travis-ci.org/npmdoc/node-npmdoc-connect-redis)
+
 #### Redis session store for Connect
 
-[![NPM](https://nodei.co/npm/connect-redis.png?downloads=true)](https://www.npmjs.com/package/connect-redis)
+[![NPM](https://nodei.co/npm/connect-redis.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/connect-redis)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-connect-redis/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-connect-redis_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-connect-redis/build/apidoc.html)
+- [https://npmdoc.github.io/node-npmdoc-connect-redis/build/apidoc.html](https://npmdoc.github.io/node-npmdoc-connect-redis/build/apidoc.html)
+
+[![apidoc](https://npmdoc.github.io/node-npmdoc-connect-redis/build/screenCapture.buildCi.browser.%252Ftmp%252Fbuild%252Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-connect-redis/build/apidoc.html)
 
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-connect-redis/build/screenCapture.npmPackageListing.svg)
 
@@ -17,16 +22,14 @@
 
 {
     "author": {
-        "name": "TJ Holowaychuk",
-        "email": "tj@vision-media.ca"
+        "name": "TJ Holowaychuk"
     },
     "bugs": {
         "url": "https://github.com/visionmedia/connect-redis/issues"
     },
     "contributors": [
         {
-            "name": "Marc Harter",
-            "email": "wavded@gmail.com"
+            "name": "Marc Harter"
         }
     ],
     "dependencies": {
@@ -57,21 +60,17 @@
     "main": "./index.js",
     "maintainers": [
         {
-            "name": "tjholowaychuk",
-            "email": "tj@vision-media.ca"
+            "name": "tjholowaychuk"
         },
         {
-            "name": "chirag04",
-            "email": "jain_chirag04@yahoo.com"
+            "name": "chirag04"
         },
         {
-            "name": "wavded",
-            "email": "wavded@gmail.com"
+            "name": "wavded"
         }
     ],
     "name": "connect-redis",
     "optionalDependencies": {},
-    "readme": "ERROR: No README data found!",
     "repository": {
         "type": "git",
         "url": "git+ssh://git@github.com/visionmedia/connect-redis.git"
@@ -81,19 +80,10 @@
         "lint": "eslint index.js test lib bench",
         "test": "DEBUG=* istanbul cover tape \"test/*-test.js\""
     },
-    "version": "3.2.0"
+    "version": "3.2.0",
+    "bin": {}
 }
 ```
-
-
-
-# <a name="apidoc.tableOfContents"></a>[table of contents](#apidoc.tableOfContents)
-
-#### [module connect-redis](#apidoc.module.connect-redis)
-
-
-
-# <a name="apidoc.module.connect-redis"></a>[module connect-redis](#apidoc.module.connect-redis)
 
 
 
